@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,11 @@ public class ExternalServerController {
 
     @Autowired
     private ExternalTableRepository externalTableRepository;
+
+    @RequestMapping("")
+    public String index(ModelMap map) {
+        return "index";
+    }
 
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -32,15 +39,13 @@ public class ExternalServerController {
         return res;
     }
 
-    @RequestMapping("")
-    public String index(ModelMap map) {
-        return "index";
-    }
-
     @RequestMapping(value = "get/{timestamp}", method = RequestMethod.GET)
     public ApiResponse<List<Map<String, Object>>> getDatabaseList(@PathVariable String timestamp) {
 
-        List<Map<String, Object>> externalTableList = externalTableRepository.getAllByUpdateTimeLimitn(timestamp);
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime httpTimeStamp = LocalDateTime.parse(timestamp, df);
+
+        List<Map<String, Object>> externalTableList = externalTableRepository.getAllByUpdateTimeLimitn(httpTimeStamp);
 
         ApiResponse<List<Map<String, Object>>> res = new ApiResponse<>();
         res.setCode(ApiResponse.OK);
