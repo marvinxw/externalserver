@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>首页</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{static/css/main.css}">
+</head>
+    <body>
+        <form action="#" th:action="@{/external/add}" th:object="${externalTable}" method="post">
+            姓名：<input type="text" th:field="*{name}" />
+            UUID：<input type="text" th:field="*{uuid}" />
+            <input type="submit" />
+        </form>
+    </body>
+</html>
