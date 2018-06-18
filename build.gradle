@@ -30,6 +30,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-thymeleaf')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-logging')
+    compile('net.sourceforge.nekohtml:nekohtml:1.9.21')
     compile('com.alibaba:druid:1.1.8')
     compile('com.alibaba:fastjson:1.2.47')
     runtime('mysql:mysql-connector-java')

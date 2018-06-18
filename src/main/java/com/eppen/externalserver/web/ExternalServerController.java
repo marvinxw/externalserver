@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping(value = "/external")
 public class ExternalServerController {
@@ -15,31 +18,38 @@ public class ExternalServerController {
     @Autowired
     private ExternalTableRepository externalTableRepository;
 
+    @ResponseBody
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public ApiResponse<ExternalTable> save(@ModelAttribute(value="externalTable") ExternalTable externalTable) {
+
+        externalTable.setDelFlag(1l);
+        externalTableRepository.save(externalTable);
+        ApiResponse<ExternalTable> res = new ApiResponse<>();
+        res.setCode(ApiResponse.OK);
+        res.setData(externalTable);
+        res.setMsg("成功!!!");
+
+        return res;
+    }
+
     @RequestMapping("")
     public String index(ModelMap map) {
-        // 加入一个属性，用来在模板中读取
-        map.addAttribute("host", "http://blog.didispace.com");
-
-        map.put("message", "hello eppon");
-
-        // return模板文件的名称，对应src/main/resources/templates/index.html
         return "index";
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @ResponseBody
-    public ApiResponse<ExternalTable> save(@ModelAttribute(value="externalTable") ExternalTable externalTable) {
+    @RequestMapping(value = "get/{timestamp}", method = RequestMethod.GET)
+    public ApiResponse<List<Map<String, Object>>> getDatabaseList(@PathVariable String timestamp) {
 
-//        ExternalTable externalTable = JSONObject.parseObject(requestBody, ExternalTable.class);
+        List<Map<String, Object>> externalTableList = externalTableRepository.getAllByUpdateTimeLimitn(timestamp);
 
-        externalTable = externalTableRepository.save(externalTable);
-
-        ApiResponse<ExternalTable> res = new ApiResponse<>();
+        ApiResponse<List<Map<String, Object>>> res = new ApiResponse<>();
         res.setCode(ApiResponse.OK);
-        res.setMsg("SUCCESS");
-        res.setData(externalTable);
+        res.setData(externalTableList);
+        res.setMsg("成功!!!");
+
         return res;
     }
+
 //    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json")
 //    @ResponseBody
 //    public ApiResponse<ExternalTable> addDatabase(@RequestBody String requestBody) {
