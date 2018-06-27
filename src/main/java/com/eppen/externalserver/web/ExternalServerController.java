@@ -1,6 +1,5 @@
 package com.eppen.externalserver.web;
 
-import com.alibaba.fastjson.JSONObject;
 import com.eppen.externalserver.common.ApiResponse;
 import com.eppen.externalserver.models.ExternalTable;
 import com.eppen.externalserver.repository.ExternalTableRepository;
